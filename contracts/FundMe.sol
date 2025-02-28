@@ -17,10 +17,13 @@ contract FundMe {
 
     uint256 public duration;
 
+    address public owner;
+
     constructor (uint256 _startTime, uint256 _duration) {
         dataFeed = AggregatorV3Interface(0x694AA1769357215DE4FAC081bf1f309aDC325306);
         startTime = _startTime;
         duration = _duration;
+        owner = msg.sender;
     }
 
     // 创建一个收款函数
@@ -30,22 +33,46 @@ contract FundMe {
         require(block.timestamp <= startTime + duration, "The fund is end");
 
         uint256 fundAmount = convertToUSD(msg.value);
-        require(fundAmount >= MIN_AMOUNT, "You need to pay more");
+        require(fundAmount >= MIN_AMOUNT, "You need to pay more ETH");
 
-        funders[msg.sender] = fundAmount;
+        // 记录投资人并且查看
+        funders[msg.sender] = msg.value;
     }
 
-    function convertToUSD(uint256 _amount) internal view returns (uint256){
+    // 在锁定期内，达到目标值，生产商可以提款
+    function getFund() external fundIsNotEnd{
+        require(msg.sender == owner, "You are not the owner");
+
+        uint256 totalFundAmount = address(this).balance;
+
+        require(convertToUSD(totalFundAmount) >= MIN_FUND_GOAL, "The goal is not reached");
+
+        bool res;
+        (res,) = payable (msg.sender).call{value: totalFundAmount}("");
+
+        require(res, "Get fund failed");
+    }
+
+    // 在锁定期内，没有达到目标值，投资人在锁定期以后退款
+    function refund() external fundIsNotEnd{
+        uint256 totalFundAmount = address(this).balance;
+        require(convertToUSD(totalFundAmount) < MIN_FUND_GOAL, "The goal is reached");
+
+        require(funders[msg.sender] != 0, "You have not fund");
+
+        bool res;
+        (res,) = payable (msg.sender).call{value: funders[msg.sender]}("");
+
+        require(res, "Refund failed");
+
+        funders[msg.sender] = 0;
+    }
+
+    function convertToUSD(uint256 _amount) private view returns (uint256){
        uint256 currentEthToUsd = uint256(getChainlinkDataFeedLatestAnswer());
 
        return (currentEthToUsd / 10 ** 8) * _amount;
     }
-
-    // 记录投资人并且查看
-
-    // 在锁定期内，达到目标值，生产商可以提款
-
-    // 在锁定期内，没有达到目标值，投资人在锁定期以后退款
 
      /**
      * Returns the latest answer.
@@ -60,5 +87,10 @@ contract FundMe {
             /*uint80 answeredInRound*/
         ) = dataFeed.latestRoundData();
         return answer;
+    }
+
+    modifier fundIsNotEnd() {
+        require(block.timestamp > startTime + duration, "The fund is not end yet");
+        _;
     }
 }
