@@ -68,6 +68,12 @@ contract FundMe {
         funders[msg.sender] = 0;
     }
 
+    function reduceFundAmount(address _funder, uint256 reducedFundAmount) internal {
+        uint256 fundAmount = funders[_funder];
+
+        funders[_funder] = fundAmount - reducedFundAmount;
+    }
+
     function convertToUSD(uint256 _amount) private view returns (uint256){
        uint256 currentEthToUsd = uint256(getChainlinkDataFeedLatestAnswer());
 
