@@ -230,6 +230,19 @@
 				"type": "function"
 			},
 			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "burnFundTokenAmount",
+						"type": "uint256"
+					}
+				],
+				"name": "burn",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
 				"inputs": [],
 				"name": "decimals",
 				"outputs": [
@@ -514,19 +527,19 @@
 			]
 		},
 		"contracts/FundMe.sol": {
-			"keccak256": "0x160b2789ea91671114b6fbad111f281d34f90b03ed9318806a7cf969ef62c416",
+			"keccak256": "0xe271765aa55db587cd34788b1bfc4cabe3740a63d451cfe19e1485e1c67d48f3",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://608bad4326c3d1bf4de1fbe4aceb79d90059b3818c651e859cfc6b547ec5d841",
-				"dweb:/ipfs/QmWNVYUqrvAHpDQnzg8NTZ2JkWkX7qt6QeJZPYHgGbjK1L"
+				"bzz-raw://2aef6560ca56065190abc54cc3e6c47f42dc6ee252f5b0a89d66ae8afe4b2d7d",
+				"dweb:/ipfs/QmPbRz1zGt6EC4zooUFJwbUQJaVaYAbWhd5n5Zy8BcatBx"
 			]
 		},
 		"contracts/FundMeERC20.sol": {
-			"keccak256": "0xf862bc69803fffe4d69f80db6f3604b2f90a19051432f18efe08847b08f3a2dd",
+			"keccak256": "0xa09ae6628ac309ff1f31a0f6f09b27a997ce3d8fcba4cc63db4c8452b57825da",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://982f5227bc175cd295cea829393717e1174f634311e81314821f8395052289be",
-				"dweb:/ipfs/QmVgGbZVYdhskaSfz68r4gxrm7ay87MKgsF8fJa7zi4yYy"
+				"bzz-raw://38446515380fd6f3147b556791596491e333633fd76682864eb93f678a07a49e",
+				"dweb:/ipfs/QmfAZKKV4rKDEnz1Q7gYzy9rgBcvPLgDYocRnaQpqjsHyr"
 			]
 		}
 	},

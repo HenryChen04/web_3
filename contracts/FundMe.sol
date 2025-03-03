@@ -5,19 +5,23 @@ import {AggregatorV3Interface} from "@chainlink/contracts/src/v0.8/shared/interf
 
 contract FundMe {
 
-    mapping (address => uint256) public funders;
-
     uint256 constant MIN_AMOUNT = 10 * 10 ** 18; // Wei
 
     uint256 constant MIN_FUND_GOAL = 20 * 10 ** 18;
 
+    address private erc20Addr;
+
     AggregatorV3Interface internal dataFeed;
+
+    mapping (address => uint256) public funders;
 
     uint256 public startTime;
 
     uint256 public duration;
 
     address public owner;
+
+    bool public getFundResult;
 
     constructor (uint256 _startTime, uint256 _duration) {
         dataFeed = AggregatorV3Interface(0x694AA1769357215DE4FAC081bf1f309aDC325306);
@@ -51,6 +55,8 @@ contract FundMe {
         (res,) = payable (msg.sender).call{value: totalFundAmount}("");
 
         require(res, "Get fund failed");
+
+        getFundResult = true;
     }
 
     // 在锁定期内，没有达到目标值，投资人在锁定期以后退款
@@ -68,10 +74,16 @@ contract FundMe {
         funders[msg.sender] = 0;
     }
 
-    function reduceFundAmount(address _funder, uint256 reducedFundAmount) internal {
-        uint256 fundAmount = funders[_funder];
+    function setFundAmount(address _funder, uint256 existedfundAmount) public  {
+        require(msg.sender == erc20Addr, "You can not invoke this api");
 
-        funders[_funder] = fundAmount - reducedFundAmount;
+        funders[_funder] = existedfundAmount;
+    }
+
+    function setErc20Addr(address _erc20Addr) public {
+        require(msg.sender == owner, "You are not the owner");
+        
+        erc20Addr = _erc20Addr;
     }
 
     function convertToUSD(uint256 _amount) private view returns (uint256){
