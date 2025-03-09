@@ -396,24 +396,6 @@
 			},
 			{
 				"inputs": [],
-				"name": "getLastReceivedMessageDetails",
-				"outputs": [
-					{
-						"internalType": "bytes32",
-						"name": "messageId",
-						"type": "bytes32"
-					},
-					{
-						"internalType": "string",
-						"name": "text",
-						"type": "string"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
 				"name": "getRouter",
 				"outputs": [
 					{
@@ -470,35 +452,6 @@
 			{
 				"inputs": [
 					{
-						"internalType": "uint64",
-						"name": "_destinationChainSelector",
-						"type": "uint64"
-					},
-					{
-						"internalType": "address",
-						"name": "_receiver",
-						"type": "address"
-					},
-					{
-						"internalType": "string",
-						"name": "_text",
-						"type": "string"
-					}
-				],
-				"name": "sendMessagePayNative",
-				"outputs": [
-					{
-						"internalType": "bytes32",
-						"name": "messageId",
-						"type": "bytes32"
-					}
-				],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
 						"internalType": "bytes4",
 						"name": "interfaceId",
 						"type": "bytes4"
@@ -527,41 +480,6 @@
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "_beneficiary",
-						"type": "address"
-					}
-				],
-				"name": "withdraw",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "_beneficiary",
-						"type": "address"
-					},
-					{
-						"internalType": "address",
-						"name": "_token",
-						"type": "address"
-					}
-				],
-				"name": "withdrawToken",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"stateMutability": "payable",
-				"type": "receive"
 			}
 		],
 		"devdoc": {
@@ -588,12 +506,6 @@
 						"_router": "The address of the router contract."
 					}
 				},
-				"getLastReceivedMessageDetails()": {
-					"returns": {
-						"messageId": "The ID of the last received message.",
-						"text": "The last received text."
-					}
-				},
 				"getRouter()": {
 					"returns": {
 						"_0": "CCIP router address"
@@ -601,17 +513,6 @@
 				},
 				"sendMessagePayLINK(uint64,address,string)": {
 					"details": "Assumes your contract has sufficient LINK.",
-					"params": {
-						"_destinationChainSelector": "The identifier (aka selector) for the destination blockchain.",
-						"_receiver": "The address of the recipient on the destination blockchain.",
-						"_text": "The text to be sent."
-					},
-					"returns": {
-						"messageId": "The ID of the CCIP message that was sent."
-					}
-				},
-				"sendMessagePayNative(uint64,address,string)": {
-					"details": "Assumes your contract has sufficient native gas tokens.",
 					"params": {
 						"_destinationChainSelector": "The identifier (aka selector) for the destination blockchain.",
 						"_receiver": "The address of the recipient on the destination blockchain.",
@@ -629,22 +530,8 @@
 					"returns": {
 						"_0": "true if the interfaceId is supported"
 					}
-				},
-				"withdraw(address)": {
-					"details": "This function reverts if there are no funds to withdraw or if the transfer fails. It should only be callable by the owner of the contract.",
-					"params": {
-						"_beneficiary": "The address to which the Ether should be sent."
-					}
-				},
-				"withdrawToken(address,address)": {
-					"details": "This function reverts with a 'NothingToWithdraw' error if there are no tokens to withdraw.",
-					"params": {
-						"_beneficiary": "The address to which the tokens will be sent.",
-						"_token": "The contract address of the ERC20 token to be withdrawn."
-					}
 				}
 			},
-			"title": "- A simple messenger contract for sending/receiving string data across chains.",
 			"version": 1
 		},
 		"userdoc": {
@@ -659,9 +546,6 @@
 				"constructor": {
 					"notice": "Constructor initializes the contract with the router address."
 				},
-				"getLastReceivedMessageDetails()": {
-					"notice": "Fetches the details of the last received message."
-				},
 				"getRouter()": {
 					"notice": "Return the current router"
 				},
@@ -671,20 +555,11 @@
 				"sendMessagePayLINK(uint64,address,string)": {
 					"notice": "Sends data to receiver on the destination chain.Pay for fees in LINK."
 				},
-				"sendMessagePayNative(uint64,address,string)": {
-					"notice": "Sends data to receiver on the destination chain.Pay for fees in native gas."
-				},
 				"supportsInterface(bytes4)": {
 					"notice": "IERC165 supports an interfaceId"
 				},
 				"transferOwnership(address)": {
 					"notice": "Allows an owner to begin transferring ownership to a new address."
-				},
-				"withdraw(address)": {
-					"notice": "Allows the contract owner to withdraw the entire balance of Ether from the contract."
-				},
-				"withdrawToken(address,address)": {
-					"notice": "Allows the owner of the contract to withdraw all tokens of a specific ERC20 token."
 				}
 			},
 			"version": 1
@@ -811,11 +686,11 @@
 			]
 		},
 		"contracts/NFTLockAndRelease.sol": {
-			"keccak256": "0x85583b918527acf82b8e96988e9eab771cc19c7202fd7737417cfe9f2d90b683",
+			"keccak256": "0x36b61588cb770d532163ac593a8ef84872b77641f793de4cf56ea6402d264c22",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://8f6e184b6cef05898b13c9122a44ff97280ed853cddfb4ee6325cffcfde8ecb0",
-				"dweb:/ipfs/QmZUEuquBAzDZU3gvsxT6WnLNPVhixtSzUgf6E8ETs35w9"
+				"bzz-raw://68b58e7670947ff617822c017607742b43fb881474701381c4f539d0424e2bb2",
+				"dweb:/ipfs/QmXm2aLX9CRLVkACjrwi52ReXg218czsmnqwH4d14UJgMj"
 			]
 		}
 	},

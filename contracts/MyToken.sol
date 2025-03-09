@@ -24,8 +24,6 @@ contract MyToken is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burnable, 
         return tokenId;
     }
 
-    // The following functions are overrides required by Solidity.
-
     function _update(address to, uint256 tokenId, address auth)
         internal
         override(ERC721, ERC721Enumerable)
