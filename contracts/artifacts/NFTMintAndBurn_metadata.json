@@ -1,0 +1,929 @@
+{
+	"compiler": {
+		"version": "0.8.26+commit.8a97fa7a"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_router",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_link",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "wnftAddr",
+						"type": "address"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint64",
+						"name": "destinationChainSelector",
+						"type": "uint64"
+					}
+				],
+				"name": "DestinationChainNotAllowlisted",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "owner",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "target",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "value",
+						"type": "uint256"
+					}
+				],
+				"name": "FailedToWithdrawEth",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "InvalidReceiverAddress",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "router",
+						"type": "address"
+					}
+				],
+				"name": "InvalidRouter",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "currentBalance",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "calculatedFees",
+						"type": "uint256"
+					}
+				],
+				"name": "NotEnoughBalance",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "NothingToWithdraw",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "sender",
+						"type": "address"
+					}
+				],
+				"name": "SenderNotAllowlisted",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint64",
+						"name": "sourceChainSelector",
+						"type": "uint64"
+					}
+				],
+				"name": "SourceChainNotAllowlisted",
+				"type": "error"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "bytes32",
+						"name": "messageId",
+						"type": "bytes32"
+					},
+					{
+						"indexed": true,
+						"internalType": "uint64",
+						"name": "sourceChainSelector",
+						"type": "uint64"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "sender",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "text",
+						"type": "string"
+					}
+				],
+				"name": "MessageReceived",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "bytes32",
+						"name": "messageId",
+						"type": "bytes32"
+					},
+					{
+						"indexed": true,
+						"internalType": "uint64",
+						"name": "destinationChainSelector",
+						"type": "uint64"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "receiver",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "bytes",
+						"name": "data",
+						"type": "bytes"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "feeToken",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "fees",
+						"type": "uint256"
+					}
+				],
+				"name": "MessageSent",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "from",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "to",
+						"type": "address"
+					}
+				],
+				"name": "OwnershipTransferRequested",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "from",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "to",
+						"type": "address"
+					}
+				],
+				"name": "OwnershipTransferred",
+				"type": "event"
+			},
+			{
+				"inputs": [],
+				"name": "acceptOwnership",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint64",
+						"name": "_destinationChainSelector",
+						"type": "uint64"
+					},
+					{
+						"internalType": "bool",
+						"name": "allowed",
+						"type": "bool"
+					}
+				],
+				"name": "allowlistDestinationChain",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_sender",
+						"type": "address"
+					},
+					{
+						"internalType": "bool",
+						"name": "allowed",
+						"type": "bool"
+					}
+				],
+				"name": "allowlistSender",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint64",
+						"name": "_sourceChainSelector",
+						"type": "uint64"
+					},
+					{
+						"internalType": "bool",
+						"name": "allowed",
+						"type": "bool"
+					}
+				],
+				"name": "allowlistSourceChain",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint64",
+						"name": "",
+						"type": "uint64"
+					}
+				],
+				"name": "allowlistedDestinationChains",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "allowlistedSenders",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint64",
+						"name": "",
+						"type": "uint64"
+					}
+				],
+				"name": "allowlistedSourceChains",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "tokenId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "newOwner",
+						"type": "address"
+					},
+					{
+						"internalType": "uint64",
+						"name": "chainSelector",
+						"type": "uint64"
+					},
+					{
+						"internalType": "address",
+						"name": "receiver",
+						"type": "address"
+					}
+				],
+				"name": "burnAndSendNFT",
+				"outputs": [
+					{
+						"internalType": "bytes32",
+						"name": "",
+						"type": "bytes32"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"components": [
+							{
+								"internalType": "bytes32",
+								"name": "messageId",
+								"type": "bytes32"
+							},
+							{
+								"internalType": "uint64",
+								"name": "sourceChainSelector",
+								"type": "uint64"
+							},
+							{
+								"internalType": "bytes",
+								"name": "sender",
+								"type": "bytes"
+							},
+							{
+								"internalType": "bytes",
+								"name": "data",
+								"type": "bytes"
+							},
+							{
+								"components": [
+									{
+										"internalType": "address",
+										"name": "token",
+										"type": "address"
+									},
+									{
+										"internalType": "uint256",
+										"name": "amount",
+										"type": "uint256"
+									}
+								],
+								"internalType": "struct Client.EVMTokenAmount[]",
+								"name": "destTokenAmounts",
+								"type": "tuple[]"
+							}
+						],
+						"internalType": "struct Client.Any2EVMMessage",
+						"name": "message",
+						"type": "tuple"
+					}
+				],
+				"name": "ccipReceive",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getRouter",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "owner",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint64",
+						"name": "_destinationChainSelector",
+						"type": "uint64"
+					},
+					{
+						"internalType": "address",
+						"name": "_receiver",
+						"type": "address"
+					},
+					{
+						"internalType": "bytes",
+						"name": "_data",
+						"type": "bytes"
+					}
+				],
+				"name": "sendMessagePayLINK",
+				"outputs": [
+					{
+						"internalType": "bytes32",
+						"name": "messageId",
+						"type": "bytes32"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes4",
+						"name": "interfaceId",
+						"type": "bytes4"
+					}
+				],
+				"name": "supportsInterface",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "to",
+						"type": "address"
+					}
+				],
+				"name": "transferOwnership",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {
+				"allowlistDestinationChain(uint64,bool)": {
+					"details": "Updates the allowlist status of a destination chain for transactions."
+				},
+				"allowlistSender(address,bool)": {
+					"details": "Updates the allowlist status of a sender for transactions."
+				},
+				"allowlistSourceChain(uint64,bool)": {
+					"details": "Updates the allowlist status of a source chain for transactions."
+				},
+				"ccipReceive((bytes32,uint64,bytes,bytes,(address,uint256)[]))": {
+					"details": "Note ensure you check the msg.sender is the OffRampRouter",
+					"params": {
+						"message": "CCIP Message"
+					}
+				},
+				"constructor": {
+					"params": {
+						"_link": "The address of the link contract.",
+						"_router": "The address of the router contract."
+					}
+				},
+				"getRouter()": {
+					"returns": {
+						"_0": "CCIP router address"
+					}
+				},
+				"sendMessagePayLINK(uint64,address,bytes)": {
+					"details": "Assumes your contract has sufficient LINK.",
+					"params": {
+						"_data": "The text to be sent.",
+						"_destinationChainSelector": "The identifier (aka selector) for the destination blockchain.",
+						"_receiver": "The address of the recipient on the destination blockchain."
+					},
+					"returns": {
+						"messageId": "The ID of the CCIP message that was sent."
+					}
+				},
+				"supportsInterface(bytes4)": {
+					"details": "Should indicate whether the contract implements IAny2EVMMessageReceiver e.g. return interfaceId == type(IAny2EVMMessageReceiver).interfaceId || interfaceId == type(IERC165).interfaceId This allows CCIP to check if ccipReceive is available before calling it. If this returns false or reverts, only tokens are transferred to the receiver. If this returns true, tokens are transferred and ccipReceive is called atomically. Additionally, if the receiver address does not have code associated with it at the time of execution (EXTCODESIZE returns 0), only tokens will be transferred.",
+					"params": {
+						"interfaceId": "The interfaceId to check"
+					},
+					"returns": {
+						"_0": "true if the interfaceId is supported"
+					}
+				}
+			},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {
+				"acceptOwnership()": {
+					"notice": "Allows an ownership transfer to be completed by the recipient."
+				},
+				"ccipReceive((bytes32,uint64,bytes,bytes,(address,uint256)[]))": {
+					"notice": "Called by the Router to deliver a message. If this reverts, any token transfers also revert. The message will move to a FAILED state and become available for manual execution."
+				},
+				"constructor": {
+					"notice": "Constructor initializes the contract with the router address."
+				},
+				"getRouter()": {
+					"notice": "Return the current router"
+				},
+				"owner()": {
+					"notice": "Get the current owner"
+				},
+				"sendMessagePayLINK(uint64,address,bytes)": {
+					"notice": "Sends data to receiver on the destination chain.Pay for fees in LINK."
+				},
+				"supportsInterface(bytes4)": {
+					"notice": "IERC165 supports an interfaceId"
+				},
+				"transferOwnership(address)": {
+					"notice": "Allows an owner to begin transferring ownership to a new address."
+				}
+			},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/NFTMintAndBurn.sol": "NFTMintAndBurn"
+		},
+		"evmVersion": "cancun",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"@chainlink/contracts-ccip/src/v0.8/ccip/applications/CCIPReceiver.sol": {
+			"keccak256": "0x846fbf21ac7bc86c8e4aa0b3dc126126536cc414d3bb99c1fed747ce99f9f40c",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://384d2d6f2a5056f43de589e9f2df1afa69afe7861871715ec371327cbc5684f9",
+				"dweb:/ipfs/QmZmpeH4sTwVdvfTGvfsthwEE4eTw7C3hvHfNFedLPfisp"
+			]
+		},
+		"@chainlink/contracts-ccip/src/v0.8/ccip/interfaces/IAny2EVMMessageReceiver.sol": {
+			"keccak256": "0xd2a05a4f58a453cbf8cfa6aa78f58cb8e42091b3a025f711a0aa51f584e16b48",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://e3bb4ca50612b0150a29b9ea7c82f6228914ff54716584541bad5c0259e8fa33",
+				"dweb:/ipfs/QmTnqhNtBD9bUmqVaR4YHkWrBUdSGHV3DXAgrTM193PGkH"
+			]
+		},
+		"@chainlink/contracts-ccip/src/v0.8/ccip/interfaces/IRouterClient.sol": {
+			"keccak256": "0x176bc6a1bec19d76464566d4becb68946e4c53b779e2019b34f95be4fee571f6",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://8f8abd3813d7acb8f5b510dbdc9f7eb9b0fe300ea4261ae9c4f843e0d3f0b24a",
+				"dweb:/ipfs/QmSCmCC5wXYqgvLfpdqWxZTfo837DYVPLo9CYEKhgid1DA"
+			]
+		},
+		"@chainlink/contracts-ccip/src/v0.8/ccip/libraries/Client.sol": {
+			"keccak256": "0xa1ce70adec733c80b230084b425a50caa852a99f17a7e43e38a96a975f11ce88",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://08db3aa57ceae13832c1bf323aa29afa2620fd5b5205ff0d56152bf323c56256",
+				"dweb:/ipfs/QmUG2FSVP8xXVkdgFwNhc4YFDU7FNCaf1kKShiTaaHUddE"
+			]
+		},
+		"@chainlink/contracts-ccip/src/v0.8/shared/access/ConfirmedOwner.sol": {
+			"keccak256": "0xdcb0e9135ddbe71ee27ba99fa06656960c66c964cf2ecb29696da1c1427d9861",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://f914a1b638300e82d8f5a020a4195235599afebab4ef1e10c6992f3c90e7df3e",
+				"dweb:/ipfs/Qmf2MbuVB16qbCGii3U5cjcBvVjAHHYzKp9voJa2eDch9B"
+			]
+		},
+		"@chainlink/contracts-ccip/src/v0.8/shared/access/ConfirmedOwnerWithProposal.sol": {
+			"keccak256": "0x2422a055657a87e98be61f8f31abb1824ec50fd0f73949f4e3c6ac877efb6da8",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://fde3b9ac3a4c42ea43e2f92b037d32ab20e30818471c6e20d2590147a6c2958a",
+				"dweb:/ipfs/QmQ2ohQP4GnhPUsiWCvCfb1dsoGYDdxSap3dxtnYTV4rmT"
+			]
+		},
+		"@chainlink/contracts-ccip/src/v0.8/shared/access/OwnerIsCreator.sol": {
+			"keccak256": "0x895af02d6a3df2930bbb6ec1f2d68118b492ca6e710ba0c34fcb6b574a0906aa",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://c4c69fab5eea1c0448f856a51d7e5736454fe5cc083d36c60bf3ee23bb3d0e8e",
+				"dweb:/ipfs/QmP4fYQ9k7xeZms6cwnqnQuuAkRkeE2TWewyvCD8Mrc2DZ"
+			]
+		},
+		"@chainlink/contracts-ccip/src/v0.8/shared/interfaces/IOwnable.sol": {
+			"keccak256": "0x885de72b7b4e4f1bf8ba817a3f2bcc37fd9022d342c4ce76782151c30122d767",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://17c636625a5d29a140612db496d2cca9fb4b48c673adb0fd7b3957d287e75921",
+				"dweb:/ipfs/QmNoBX8TY424bdQWyQC7y3kpKfgxyWxhLw7KEhhEEoBN9q"
+			]
+		},
+		"@chainlink/contracts-ccip/src/v0.8/vendor/openzeppelin-solidity/v4.8.3/contracts/token/ERC20/IERC20.sol": {
+			"keccak256": "0x527e858729af8197f6c8f99554d32bfc4f5a72b15975489c94809363d7ae522f",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://6828dfa867eaff18f383aad4ca4b5aaedb93109023d74aaf418fee6c06e556c2",
+				"dweb:/ipfs/QmXSQ9WnaJ6Ba9gvKvgNxDY7sa7ATJ9V55uwGSGCpBuJKu"
+			]
+		},
+		"@chainlink/contracts-ccip/src/v0.8/vendor/openzeppelin-solidity/v4.8.3/contracts/token/ERC20/extensions/draft-IERC20Permit.sol": {
+			"keccak256": "0x28d267ba89cbaca4a86577add59f1a18842ca6e7d80a05f3dbf52127928a5e2c",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://67a26777e88ae78952713f4479ca3126db804dc9ce1a85f079ec067393a6275d",
+				"dweb:/ipfs/QmNLxBkkA6os8W9vUeCsjcFsMkGhtqAZrGjPuoACTqVhbh"
+			]
+		},
+		"@chainlink/contracts-ccip/src/v0.8/vendor/openzeppelin-solidity/v4.8.3/contracts/token/ERC20/utils/SafeERC20.sol": {
+			"keccak256": "0x19d64e8f5fa895ab2625917111fd9f316d4f9314239f0712fd6dc2f5bff9d0c9",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://14de158ff9e64ebeac381bba59fe3500b48853063cfb27343090a3f710795fee",
+				"dweb:/ipfs/QmQJE5SfDfgy8aKENnsjW4t9P4bmTSnujotFmnXnrwpfzQ"
+			]
+		},
+		"@chainlink/contracts-ccip/src/v0.8/vendor/openzeppelin-solidity/v4.8.3/contracts/utils/Address.sol": {
+			"keccak256": "0x172a09a55d730f20a9bb309086a4ad06b17c612151f58bab2b44efe78d583d4e",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://1f812456ddd112f09606bfc5965c6e643558d740264273017ad556122502b4e2",
+				"dweb:/ipfs/QmdWE4wncanz9Lhu5ESgSo14jAR74Ss5puCM5zUGonATLw"
+			]
+		},
+		"@chainlink/contracts-ccip/src/v0.8/vendor/openzeppelin-solidity/v5.0.2/contracts/utils/introspection/IERC165.sol": {
+			"keccak256": "0x4296879f55019b23e135000eb36896057e7101fb7fb859c5ef690cf14643757b",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://87b3541437c8c443ccd36795e56a338ed12855eec17f8da624511b8d1a7e14df",
+				"dweb:/ipfs/QmeJQCtZrQjtJLr6u7ZHWeH3pBnjtLWzvRrKViAi7UZqxL"
+			]
+		},
+		"@openzeppelin/contracts/access/Ownable.sol": {
+			"keccak256": "0xff6d0bb2e285473e5311d9d3caacb525ae3538a80758c10649a4d61029b017bb",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://8ed324d3920bb545059d66ab97d43e43ee85fd3bd52e03e401f020afb0b120f6",
+				"dweb:/ipfs/QmfEckWLmZkDDcoWrkEvMWhms66xwTLff9DDhegYpvHo1a"
+			]
+		},
+		"@openzeppelin/contracts/interfaces/IERC165.sol": {
+			"keccak256": "0xde7e9fd9aee8d4f40772f96bb3b58836cbc6dfc0227014a061947f8821ea9724",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://11fea9f8bc98949ac6709f0c1699db7430d2948137aa94d5a9e95a91f61a710a",
+				"dweb:/ipfs/QmQdfRXxQjwP6yn3DVo1GHPpriKNcFghSPi94Z1oKEFUNS"
+			]
+		},
+		"@openzeppelin/contracts/interfaces/IERC4906.sol": {
+			"keccak256": "0x1b8691e244f6e11d987459993671db0af33e6a29f7805eac6a9925cc6b601957",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://a9e2a5efc2e14e98f5fe91bbab769199b4987a40dd3b96075b04957fda2ae80f",
+				"dweb:/ipfs/QmbAjrSSVBiJ6MbgF7Jkr53m674iGMZ6haWbbRrWDZJraK"
+			]
+		},
+		"@openzeppelin/contracts/interfaces/IERC721.sol": {
+			"keccak256": "0xc4d7ebf63eb2f6bf3fee1b6c0ee775efa9f31b4843a5511d07eea147e212932d",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://01c66a2fad66bc710db7510419a7eee569b40b67cd9f01b70a3fc90d6f76c03b",
+				"dweb:/ipfs/QmT1CjJZq4eTNA4nu8E9ZrWfaZu6ReUsDbjcK8DbEFqwx5"
+			]
+		},
+		"@openzeppelin/contracts/interfaces/draft-IERC6093.sol": {
+			"keccak256": "0x880da465c203cec76b10d72dbd87c80f387df4102274f23eea1f9c9b0918792b",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://399594cd8bb0143bc9e55e0f1d071d0d8c850a394fb7a319d50edd55d9ed822b",
+				"dweb:/ipfs/QmbPZzgtT6LEm9CMqWfagQFwETbV1ztpECBB1DtQHrKiRz"
+			]
+		},
+		"@openzeppelin/contracts/token/ERC721/ERC721.sol": {
+			"keccak256": "0x39ed367e54765186281efcfe83e47cf0ad62cc879f10e191360712507125f29a",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://2c5ae6d85bd48cca8d6d2fcec8c63efd86f56f8a5832577a47e403ce0e65cb09",
+				"dweb:/ipfs/QmUtcS8AbRSWhuc61puYet58os8FvSqm329ChoW8wwZXZk"
+			]
+		},
+		"@openzeppelin/contracts/token/ERC721/IERC721.sol": {
+			"keccak256": "0x5dc63d1c6a12fe1b17793e1745877b2fcbe1964c3edfd0a482fac21ca8f18261",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://6b7f97c5960a50fd1822cb298551ffc908e37b7893a68d6d08bce18a11cb0f11",
+				"dweb:/ipfs/QmQQvxBytoY1eBt3pRQDmvH2hZ2yjhs12YqVfzGm7KSURq"
+			]
+		},
+		"@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol": {
+			"keccak256": "0xb5afb8e8eebc4d1c6404df2f5e1e6d2c3d24fd01e5dfc855314951ecfaae462d",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://78586466c424f076c6a2a551d848cfbe3f7c49e723830807598484a1047b3b34",
+				"dweb:/ipfs/Qmb717ovcFxm7qgNKEShiV6M9SPR3v1qnNpAGH84D6w29p"
+			]
+		},
+		"@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol": {
+			"keccak256": "0xdee1ff07172e443c6600581fc4f11e7830a6d33e4e551752935b835d52a09404",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://c503b5573ecd8d18157903b6760e02e8f86b47238c997d6dd04b99df74ef532d",
+				"dweb:/ipfs/QmSGcRgfe18dtR4t3erYBSq3W6tPGXHPZ3JKkD1yFJsNsm"
+			]
+		},
+		"@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol": {
+			"keccak256": "0x5191f783af281c75b7de0f1e3e36cdc6ac5cb2358d929584c4953fd02fa2b5eb",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://d3ca2689d95ba45e297e55c8f71112e3ccec701d0087cb5e1c6ecb1b9ce86f00",
+				"dweb:/ipfs/QmNQ5xKxJpF9k7AahnmJYvg5XeGSYtRig2Lp2WHmWXyBze"
+			]
+		},
+		"@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol": {
+			"keccak256": "0xe52813067c6d5838eeb34e1da8beb2514371a7d778266013b04ca3be1dda7100",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://53fb552d625eb5f60ef9dce439c826bb780952cbbafc985db6e48ac6382a5585",
+				"dweb:/ipfs/QmSEbLqEWN1SqsWekfqt6RWC4oEajFWtZ5j8i6gKaGdtKr"
+			]
+		},
+		"@openzeppelin/contracts/token/ERC721/extensions/IERC721Enumerable.sol": {
+			"keccak256": "0x3d6954a93ac198a2ffa384fa58ccf18e7e235263e051a394328002eff4e073de",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://1f58c799bd939d3951c94893e83ef86acd56989d1d7db7f9d180c515e29e28ff",
+				"dweb:/ipfs/QmTgAxHAAys4kq9ZfU9YB24MWYoHLGAKSxnYUigPFrNW7g"
+			]
+		},
+		"@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol": {
+			"keccak256": "0x37d1aaaa5a2908a09e9dcf56a26ddf762ecf295afb5964695937344fc6802ce1",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://ed0bfc1b92153c5000e50f4021367b931bbe96372ac6facec3c4961b72053d02",
+				"dweb:/ipfs/Qmbwp8VDerjS5SV1quwHH1oMXxPQ93fzfLVqJ2RCqbowGE"
+			]
+		},
+		"@openzeppelin/contracts/token/ERC721/utils/ERC721Utils.sol": {
+			"keccak256": "0x40399695922383778f9f540a620bec475a2f8e0f08d41f0005682842e28a9855",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://746d295e403931aeb9d6065fd5a0871f43ab5459814a60623611e4b6641a09fd",
+				"dweb:/ipfs/QmWrgT8YJrQ9FfD1o3YYArwo57e7MGdpFKuM74qJ4qE34E"
+			]
+		},
+		"@openzeppelin/contracts/utils/Context.sol": {
+			"keccak256": "0x493033a8d1b176a037b2cc6a04dad01a5c157722049bbecf632ca876224dd4b2",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://6a708e8a5bdb1011c2c381c9a5cfd8a9a956d7d0a9dc1bd8bcdaf52f76ef2f12",
+				"dweb:/ipfs/Qmax9WHBnVsZP46ZxEMNRQpLQnrdE4dK8LehML1Py8FowF"
+			]
+		},
+		"@openzeppelin/contracts/utils/Panic.sol": {
+			"keccak256": "0xf7fe324703a64fc51702311dc51562d5cb1497734f074e4f483bfb6717572d7a",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://c6a5ff4f9fd8649b7ee20800b7fa387d3465bd77cf20c2d1068cd5c98e1ed57a",
+				"dweb:/ipfs/QmVSaVJf9FXFhdYEYeCEfjMVHrxDh5qL4CGkxdMWpQCrqG"
+			]
+		},
+		"@openzeppelin/contracts/utils/Strings.sol": {
+			"keccak256": "0x44f87e91783e88415bde66f1a63f6c7f0076f2d511548820407d5c95643ac56c",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://13a51bc2b23827744dcf5bad10c69e72528cf015a6fe48c93632cdb2c0eb1251",
+				"dweb:/ipfs/QmZwPA47Yqgje1qtkdEFEja8ntTahMStYzKf5q3JRnaR7d"
+			]
+		},
+		"@openzeppelin/contracts/utils/introspection/ERC165.sol": {
+			"keccak256": "0xddce8e17e3d3f9ed818b4f4c4478a8262aab8b11ed322f1bf5ed705bb4bd97fa",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://8084aa71a4cc7d2980972412a88fe4f114869faea3fefa5436431644eb5c0287",
+				"dweb:/ipfs/Qmbqfs5dRdPvHVKY8kTaeyc65NdqXRQwRK7h9s5UJEhD1p"
+			]
+		},
+		"@openzeppelin/contracts/utils/introspection/IERC165.sol": {
+			"keccak256": "0x79796192ec90263f21b464d5bc90b777a525971d3de8232be80d9c4f9fb353b8",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://f6fda447a62815e8064f47eff0dd1cf58d9207ad69b5d32280f8d7ed1d1e4621",
+				"dweb:/ipfs/QmfDRc7pxfaXB2Dh9np5Uf29Na3pQ7tafRS684wd3GLjVL"
+			]
+		},
+		"@openzeppelin/contracts/utils/math/Math.sol": {
+			"keccak256": "0xa00be322d7db5786750ce0ac7e2f5b633ac30a5ed5fa1ced1e74acfc19acecea",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://6c84e822f87cbdc4082533b626667b6928715bb2b1e8e7eb96954cebb9e38c8d",
+				"dweb:/ipfs/QmZmy9dgxLTerBAQDuuHqbL6EpgRxddqgv5KmwpXYVbKz1"
+			]
+		},
+		"@openzeppelin/contracts/utils/math/SafeCast.sol": {
+			"keccak256": "0x195533c86d0ef72bcc06456a4f66a9b941f38eb403739b00f21fd7c1abd1ae54",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://b1d578337048cad08c1c03041cca5978eff5428aa130c781b271ad9e5566e1f8",
+				"dweb:/ipfs/QmPFKL2r9CBsMwmUqqdcFPfHZB2qcs9g1HDrPxzWSxomvy"
+			]
+		},
+		"@openzeppelin/contracts/utils/math/SignedMath.sol": {
+			"keccak256": "0xb1970fac7b64e6c09611e6691791e848d5e3fe410fa5899e7df2e0afd77a99e3",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://db5fbb3dddd8b7047465b62575d96231ba8a2774d37fb4737fbf23340fabbb03",
+				"dweb:/ipfs/QmVUSvooZKEdEdap619tcJjTLcAuH6QBdZqAzWwnAXZAWJ"
+			]
+		},
+		"contracts/MyToken.sol": {
+			"keccak256": "0x3aea3fc18a16272e351e9f56d46da21f0175f0afe73db20696a3ec72cd32257f",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://e47e1ec094b50820885a3a6302319089aceb2ab230828cd6dce9a70ce4d7c810",
+				"dweb:/ipfs/QmZDM8RDhAHganrxwGdA8oL153ngVNHsj3Con1KS12p9cX"
+			]
+		},
+		"contracts/NFTMintAndBurn.sol": {
+			"keccak256": "0x2944e4a5251140f21f39231a4c2b696e84c8b389ea0b7dd5a0337a90f3216432",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://85afa62656a8ad69d3d3d4ead5d93f8361feeb073b2a8babe455c58afb04a870",
+				"dweb:/ipfs/QmNt9K5aifXMdxh5g7GKgYqGh9ncqA67kDevM9bj9RGjUz"
+			]
+		},
+		"contracts/WrappedMyToken.sol": {
+			"keccak256": "0xcc671783d9e1d71eabf98aefec822dbe64e9a6a1c858c8d9994a8e0b89c3b7c1",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://2e5faec9d0780d4751acb2024636094ac6e2d562aa8dfe49ecc070f0ad3d06aa",
+				"dweb:/ipfs/QmbPQXamtb2ox1AgEqtNYcgsGCuY7bk8p2fngzkP3AJyhX"
+			]
+		}
+	},
+	"version": 1
+}
